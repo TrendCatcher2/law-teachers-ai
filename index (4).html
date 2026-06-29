@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Law Teachers AI - Assistance</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root, [data-theme="light"]{
+  --bg:#e9edf4; --grid:rgba(29,52,97,.04);
+  --surface:#ffffff; --surface-2:#f5f7fb; --surface-3:#eef2f8;
+  --ink:#161d2e; --ink-soft:#5a6480; --ink-faint:#8a93a8;
+  --accent:#1d3461; --accent-ink:#ffffff; --accent-soft:rgba(29,52,97,.10);
+  --gold:#b3893c; --gold-soft:rgba(179,137,60,.14);
+  --border:#dde3ee; --border-strong:#c7d0e0;
+  --shadow:0 1px 2px rgba(20,30,60,.06), 0 10px 26px -12px rgba(20,30,60,.22);
+  --shadow-lg:0 24px 60px -22px rgba(20,30,60,.40);
+  --ring:rgba(29,52,97,.45);
+}
+[data-theme="dark"]{
+  --bg:#0d1016; --grid:rgba(255,255,255,.025);
+  --surface:#161b24; --surface-2:#1d232f; --surface-3:#232b39;
+  --ink:#e8ecf4; --ink-soft:#9aa4b6; --ink-faint:#717c91;
+  --accent:#6f9bd8; --accent-ink:#0b1018; --accent-soft:rgba(111,155,216,.16);
+  --gold:#d9b466; --gold-soft:rgba(217,180,102,.16);
+  --border:#2a3342; --border-strong:#384459;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -16px rgba(0,0,0,.66);
+  --shadow-lg:0 28px 70px -24px rgba(0,0,0,.8);
+  --ring:rgba(111,155,216,.55);
+}
+[data-theme="heritage"]{
+  --bg:#e7dcc2; --grid:rgba(82,58,28,.05);
+  --surface:#f7f0dd; --surface-2:#efe6cd; --surface-3:#e7dcbf;
+  --ink:#332715; --ink-soft:#6e5c3c; --ink-faint:#917d57;
+  --accent:#6a4a23; --accent-ink:#faf4e4; --accent-soft:rgba(106,74,35,.12);
+  --gold:#9a6e2c; --gold-soft:rgba(154,110,44,.16);
+  --border:#d8c9a4; --border-strong:#c7b386;
+  --shadow:0 1px 2px rgba(82,58,28,.10), 0 12px 30px -14px rgba(82,58,28,.34);
+  --shadow-lg:0 26px 64px -22px rgba(82,58,28,.5);
+  --ring:rgba(106,74,35,.5);
+}
+.r-Poor{--rc:#c83f33}.r-Fair{--rc:#cd7e1a}.r-Good{--rc:#1f74c4}.r-Excellent{--rc:#1f9d5b}.r-na{--rc:var(--ink-faint)}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:34px 34px;color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+h1,h2,h3,h4,.serif{font-family:'Spectral',Georgia,serif}
+.muted{color:var(--ink-soft)}.faint{color:var(--ink-faint)}
+.empty{font-size:.86rem;color:var(--ink-faint);font-style:italic;margin:.5rem 0}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow)}
+.btn{display:inline-flex;align-items:center;gap:.45rem;font-weight:600;font-size:.88rem;line-height:1;padding:.62rem .95rem;border-radius:10px;border:1px solid var(--border-strong);background:var(--surface-2);color:var(--ink);cursor:pointer;transition:.15s transform,.15s background,.15s border;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}.btn:active{transform:translateY(0)}
+.btn-sm{padding:.45rem .7rem;font-size:.8rem;border-radius:9px}
+.btn-xs{padding:.32rem .55rem;font-size:.72rem;border-radius:8px;gap:.3rem}
+.btn-primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}.btn-primary:hover{filter:brightness(1.07)}
+.btn-gold{background:var(--gold);color:#1a1206;border-color:var(--gold)}.btn-gold:hover{filter:brightness(1.06)}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--ink-soft)}.btn-ghost:hover{background:var(--surface-2);color:var(--ink)}
+.btn-outline{background:transparent}
+.btn-danger{background:transparent;color:#c83f33;border-color:rgba(200,63,51,.4)}.btn-danger:hover{background:rgba(200,63,51,.1)}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+label.fld{display:block;font-size:.74rem;font-weight:600;letter-spacing:.02em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.3rem}
+.input,.textarea,.select{width:100%;background:var(--surface-2);border:1px solid var(--border-strong);border-radius:10px;color:var(--ink);font:inherit;font-size:.9rem;padding:.6rem .7rem;transition:.15s border,.15s box-shadow}
+.textarea{min-height:84px;resize:vertical;line-height:1.5}
+.input:focus,.textarea:focus,.select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23888' fill='none' stroke-width='1.6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .7rem center;padding-right:1.8rem}
+.chip{display:inline-flex;align-items:center;gap:.35rem;font-size:.74rem;font-weight:600;padding:.25rem .55rem;border-radius:999px;background:var(--surface-3);border:1px solid var(--border);color:var(--ink-soft)}
+.badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:.2rem .5rem;border-radius:6px}
+.badge-accent{background:var(--accent-soft);color:var(--accent)}.badge-gold{background:var(--gold-soft);color:var(--gold)}
+.badge-ai{background:linear-gradient(90deg,var(--accent-soft),var(--gold-soft));color:var(--accent);border:1px solid var(--border)}
+.rating-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:700;padding:.18rem .5rem;border-radius:7px;background:color-mix(in srgb,var(--rc) 15%,transparent);color:var(--rc);border:1px solid color-mix(in srgb,var(--rc) 38%,transparent)}
+details.sec{margin-bottom:.85rem;overflow:hidden}
+details.sec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:.7rem;padding:1rem 1.1rem;user-select:none}
+details.sec>summary::-webkit-details-marker{display:none}
+details.sec>summary .chev{margin-left:auto;transition:.2s transform;color:var(--ink-faint)}
+details.sec[open]>summary .chev{transform:rotate(90deg)}
+details.sec .sec-ico{width:38px;height:38px;flex:none;display:grid;place-items:center;border-radius:10px;background:var(--surface-2);border:1px solid var(--border);font-size:1.1rem}
+details.sec .sec-body{padding:0 1.1rem 1.15rem}
+.sub{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;margin-bottom:.6rem}
+.sub>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:.55rem;padding:.7rem .85rem;font-weight:600;font-size:.92rem}
+.sub>summary::-webkit-details-marker{display:none}
+.sub .sub-body{padding:0 .85rem .9rem}
+.entry{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:.85rem .95rem;margin-top:.7rem}
+.entry .row{display:flex;gap:.5rem;font-size:.88rem;padding:.18rem 0;align-items:flex-start}
+.entry .row .k{flex:none;min-width:120px;color:var(--ink-soft);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.02em;padding-top:.05rem}
+.entry .row .v{color:var(--ink);white-space:pre-wrap;word-break:break-word}
+.mini-tbl{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:.2rem}
+.mini-tbl th,.mini-tbl td{border:1px solid var(--border);padding:.32rem .5rem;text-align:left;vertical-align:top}
+.mini-tbl th{background:var(--surface-3);font-weight:600;color:var(--ink-soft)}
+.verdict{margin-top:.7rem;border:1px solid color-mix(in srgb,var(--rc) 30%,var(--border));border-radius:12px;overflow:hidden;background:var(--surface)}
+.verdict-head{display:flex;align-items:center;gap:.7rem;padding:.7rem .85rem;background:color-mix(in srgb,var(--rc) 9%,var(--surface))}
+.verdict-score{margin-left:auto;font-family:'Spectral',serif;font-weight:700;font-size:1.4rem;color:var(--rc)}
+.meter{display:flex;gap:4px;padding:.6rem .85rem 0}
+.meter .seg{flex:1;height:7px;border-radius:4px;background:var(--surface-3)}
+.meter .seg.on{background:var(--rc)}
+.meter-labels{display:flex;gap:4px;padding:.25rem .85rem .2rem;font-size:.62rem;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.04em}
+.meter-labels span{flex:1;text-align:center}
+.verdict-body{padding:.5rem .9rem .85rem;font-size:.86rem}
+.vlist{margin:.25rem 0 .5rem;padding-left:1.05rem}.vlist li{margin:.15rem 0;color:var(--ink)}
+.vsec-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-top:.5rem}
+.tabbar{display:flex;gap:.3rem;background:var(--surface-2);border:1px solid var(--border);padding:.3rem;border-radius:12px}
+.tab{flex:1;text-align:center;padding:.55rem .6rem;border-radius:9px;font-weight:600;font-size:.88rem;color:var(--ink-soft);cursor:pointer;border:1px solid transparent;transition:.15s}
+.tab:hover{color:var(--ink)}
+.tab.active{background:var(--surface);color:var(--ink);border-color:var(--border-strong);box-shadow:var(--shadow)}
+.overlay{position:fixed;inset:0;background:rgba(8,11,18,.55);backdrop-filter:blur(3px);z-index:60;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal{width:100%;max-width:560px;max-height:88vh;overflow:auto;background:var(--surface);border:1px solid var(--border-strong);border-radius:18px;box-shadow:var(--shadow-lg)}
+.modal-wide{max-width:760px}.hidden{display:none!important}
+.logo-badge{width:42px;height:42px;flex:none;border-radius:12px;display:grid;place-items:center;background:linear-gradient(150deg,var(--accent),color-mix(in srgb,var(--accent) 55%,var(--gold)));box-shadow:var(--shadow)}
+#toast{position:fixed;bottom:1.1rem;left:50%;transform:translateX(-50%) translateY(120%);z-index:90;background:var(--ink);color:var(--bg);padding:.7rem 1.1rem;border-radius:11px;font-size:.86rem;font-weight:500;box-shadow:var(--shadow-lg);transition:.3s transform;max-width:90vw;text-align:center}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.warn{background:#b3702a;color:#fff}#toast.err{background:#c0392b;color:#fff}
+.spin{width:15px;height:15px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;display:inline-block;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.rep-row{display:flex;gap:.4rem;margin-bottom:.4rem;align-items:center}
+.rep-row .input{padding:.42rem .55rem;font-size:.83rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+@media(max-width:640px){.grid-2{grid-template-columns:1fr}.entry .row{flex-direction:column;gap:.05rem}.entry .row .k{min-width:0}}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.scl{max-width:1080px;margin:0 auto;padding:0 1rem}
+.tt-grid{width:100%;border-collapse:collapse;font-size:.78rem}
+.tt-grid th,.tt-grid td{border:1px solid var(--border);padding:.4rem;text-align:center;vertical-align:top}
+.tt-grid th{background:var(--surface-3);color:var(--ink-soft);font-weight:600}
+.tt-cell{background:var(--accent-soft);border-radius:6px;padding:.25rem .3rem;font-size:.72rem;font-weight:600;color:var(--accent);margin:.1rem 0}
+.att-row{display:flex;align-items:center;gap:.5rem;padding:.35rem 0;border-bottom:1px solid var(--border)}
+.seg-pick{display:inline-flex;border:1px solid var(--border-strong);border-radius:8px;overflow:hidden}
+.seg-pick button{border:none;background:var(--surface-2);color:var(--ink-soft);font-size:.74rem;font-weight:600;padding:.3rem .55rem;cursor:pointer}
+.seg-pick button.on-P{background:#1f9d5b;color:#fff}.seg-pick button.on-A{background:#c83f33;color:#fff}.seg-pick button.on-L{background:#cd7e1a;color:#fff}
+</style>
+</head>
+<body>
+
+<div id="entry-screen">
+  <div class="scl" style="padding-top:4vh;padding-bottom:3rem;max-width:960px">
+    <div style="display:flex;align-items:center;gap:.8rem;justify-content:center;margin-bottom:.4rem">
+      <div class="logo-badge" id="entry-logo"></div>
+      <div>
+        <h1 style="margin:0;font-size:1.7rem;font-weight:700">Law Teachers AI <span style="color:var(--gold)">·</span> Assistance</h1>
+        <div class="muted" style="font-size:.9rem">Faculty of Law — University of Turbat</div>
+      </div>
+    </div>
+    <p class="muted" style="text-align:center;max-width:560px;margin:.6rem auto 1.8rem;font-size:.95rem">
+      Your personal AI-assisted academic workspace — teaching, content, planning, records and reflection, all in one place. Select your card to begin.
+    </p>
+    <div id="entry-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:.9rem"></div>
+  </div>
+  <div style="text-align:center;padding:1.2rem;font-size:.82rem;color:var(--ink-faint)">TrendCatcher-Kech</div>
+</div>
+
+<div id="app-shell" class="hidden">
+  <header style="position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)">
+    <div class="scl" style="display:flex;align-items:center;gap:.7rem;height:62px">
+      <div class="logo-badge" id="hdr-logo" style="width:38px;height:38px;cursor:pointer" onclick="goWorkspace()"></div>
+      <div style="line-height:1.1;cursor:pointer" onclick="goWorkspace()">
+        <div style="font-family:'Spectral',serif;font-weight:700;font-size:1.05rem">Law Teachers AI</div>
+        <div class="faint" style="font-size:.7rem">Assistance · UoT</div>
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:.5rem">
+        <button class="btn btn-sm btn-ghost" id="provider-pill" onclick="openSettings()" title="AI provider & keys"></button>
+        <button class="btn btn-sm btn-ghost" onclick="openSettings()" aria-label="Settings" title="Settings">⚙️</button>
+        <button class="btn btn-sm btn-outline" onclick="switchTeacher()" title="Switch card">↺</button>
+      </div>
+    </div>
+  </header>
+  <div class="scl" style="padding-top:1.1rem;padding-bottom:2.5rem">
+    <div class="tabbar" style="margin-bottom:1.2rem;max-width:560px">
+      <div class="tab active" data-tab="workspace" onclick="setTab('workspace')">My Workspace</div>
+      <div class="tab" data-tab="resources" onclick="setTab('resources')">Resource Library</div>
+      <div class="tab" data-tab="howto" onclick="setTab('howto')">How to Use</div>
+    </div>
+    <div id="view-workspace"></div>
+    <div id="view-resources" class="hidden"></div>
+    <div id="view-howto" class="hidden"></div>
+  </div>
+  <footer style="border-top:1px solid var(--border);padding:1.1rem;text-align:center">
+    <div style="font-size:.82rem;color:var(--ink-faint)">TrendCatcher-Kech</div>
+  </footer>
+</div>
+
+<div id="settings-mount"></div>
+<div id="confirm-mount"></div>
+<div id="walkthrough-mount"></div>
+<div id="toast"></div>
+<datalist id="dl-courses"></datalist>
+
+<script>
+/* =========================================================================
+   Law Teachers AI - Assistance  ·  single-file prototype
+   ========================================================================= */
+const LS_KEY='lawteachers_ai_v1';
+const RATING=['Poor','Fair','Good','Excellent'];
+const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-3);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const empty=v=>v==null||v===''||(Array.isArray(v)&&v.length===0);
+const $=id=>document.getElementById(id);
+
+function logoSVG(){return `<svg width="60%" height="60%" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12 3v18M7 21h10M12 6l-6 1m6-1l6 1"/><path d="M6 7l-2.4 5a2.4 2.4 0 0 0 4.8 0L6 7z"/><path d="M18 8l-2.4 5a2.4 2.4 0 0 0 4.8 0L18 8z"/>
+<path d="M12 2.6l.7 1.5 1.5.2-1.1 1 .3 1.5-1.4-.8-1.4.8.3-1.5-1.1-1 1.5-.2z" fill="#f2c45a" stroke="#f2c45a" stroke-width=".4"/></svg>`;}
+
+function newTeacher(b={}){return{
+  id:b.id||uid(),seeded:!!b.seeded,
+  name:b.name||'',email:b.email||'',title:b.title||'',dept:b.dept||'',
+  photo:b.photo||'',profileUrl:b.profileUrl||'',qualifications:b.qualifications||'',
+  profile:{education:[],experience:[],trainings:[],trips:[],conferences:[],awards:[]},
+  syllabi:[],lessonPlans:[],timetable:[],students:[],attendance:[],labWork:[],
+  feedback:[],observations:[],research:[],planning:[]
+};}
+const SEED=[
+ {seeded:1,name:'Prof. Dr. Gul Hasan',email:'drgulh@uot.edu.pk',title:'Professor',dept:'Institute of Balochi Language and Culture',
+  photo:'https://uot.edu.pk/storage/uploads/staff/bc8b7133-b4b0-47b3-a003-7505e0494297.png',profileUrl:'https://uot.edu.pk/staff-profile/5'},
+ {seeded:1,name:'Nadeem Ahmed (Adv)',email:'nadeem.ahmed@uot.edu.pk',title:'',dept:'',
+  photo:'https://uot.edu.pk/storage/uploads/staff/1bc7077d-8669-4b34-b49e-c77a69d9b8b3.jpg',profileUrl:'https://uot.edu.pk/staff-profile/175'},
+ {seeded:1,name:'Naseem Baloch',email:'naseem.jan@uot.edu.pk',title:'Assistant Professor',dept:'Department of Law',
+  qualifications:'PhD in Law (continuing) – Universiti Kebangsaan Malaysia; LLM (Constitutional/Civil/Criminal Law, Medical Jurisprudence) – S.M. Law College, Karachi',
+  photo:'https://uot.edu.pk/storage/uploads/staff/e54436bb-4015-4ba1-b738-291b67c07a53.png',profileUrl:'https://uot.edu.pk/staff-profile/125'},
+ {seeded:1,name:'Beebagr Riaz',email:'beebagrriaz@uot.edu.pk',title:'Lecturer',dept:'Department of Law',
+  photo:'https://uot.edu.pk/storage/uploads/staff/d8eafa10-53d9-4d9f-b92b-64164ad42966.png',profileUrl:'https://uot.edu.pk/staff-profile/123'},
+ {seeded:1,name:'Mohammad Umar',email:'mohammad.umar@uot.edu.pk',title:'Lecturer',dept:'Department of Law',
+  photo:'https://uot.edu.pk/storage/uploads/staff/72f62c6d-8b11-4d02-bf5c-372b632a3d6f.png',profileUrl:'https://uot.edu.pk/staff-profile/112'},
+ {seeded:1,name:'Mehmood Ameer',email:'mehmood.ameer@uot.edu.pk',title:'Lecturer',dept:'Department of Law',
+  photo:'https://uot.edu.pk/storage/uploads/staff/7a23b8ad-1358-4fdc-b4db-535600d3062f.png',profileUrl:'https://uot.edu.pk/staff-profile/124'}
+];
+
+let state=null, ui={tab:'workspace'}, formOpen={}, editingId={}, pendingFiles={}, lastClassify=null, aiImg=null, aiResources=[];
+
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY));}catch(e){return null;}}
+function persist(){try{localStorage.setItem(LS_KEY,JSON.stringify(state));}catch(e){toast('Storage is full — file uploads may not persist. They still work this session.','warn');}}
+function init(){
+  state=load();
+  if(!state||!state.teachers){
+    state={teachers:SEED.map(s=>newTeacher(s)),activeId:null,
+      settings:{provider:'claude',keys:{claude:'',gemini:'',chatgpt:'',deepseek:''},theme:'light'},seenWalkthrough:false};
+    persist();
+  }
+  if(!state.settings)state.settings={provider:'claude',keys:{},theme:'light'};
+  if(!state.settings.keys)state.settings.keys={};
+  applyTheme();
+  $('entry-logo').innerHTML=logoSVG();$('hdr-logo').innerHTML=logoSVG();
+  route();
+}
+const teacher=()=>state.teachers.find(t=>t.id===state.activeId);
+function applyTheme(){document.documentElement.dataset.theme=state.settings.theme||'light';}
+
+let toastT;
+function toast(msg,kind){const el=$('toast');el.textContent=msg;el.className=(kind||'')+' show';clearTimeout(toastT);
+  toastT=setTimeout(()=>el.className=el.className.replace('show','').trim(),3200);}
+
+function route(){
+  if(state.activeId&&teacher()){$('entry-screen').classList.add('hidden');$('app-shell').classList.remove('hidden');renderApp();
+    if(!state.seenWalkthrough)showWalkthrough();
+  }else{$('app-shell').classList.add('hidden');$('entry-screen').classList.remove('hidden');renderEntry();}
+}
+function initials(n){return (n||'?').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();}
+function renderEntry(){
+  const created=state.teachers.filter(t=>!t.seeded);
+  const seeded=state.teachers.filter(t=>t.seeded);
+  const cardHTML=t=>{
+    const ph=t.photo?`<img src="${esc(t.photo)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'" style="width:54px;height:54px;border-radius:12px;object-fit:cover;border:1px solid var(--border)"><div style="display:none;width:54px;height:54px;border-radius:12px;background:var(--accent-soft);place-items:center;font-weight:700;color:var(--accent)">${esc(initials(t.name))}</div>`
+      :`<div style="display:grid;width:54px;height:54px;border-radius:12px;background:var(--accent-soft);place-items:center;font-weight:700;color:var(--accent)">${esc(initials(t.name))}</div>`;
+    return `<button class="card" onclick="selectTeacher('${t.id}')" style="text-align:left;padding:1rem;cursor:pointer;display:flex;gap:.8rem;align-items:center">
+      ${ph}<div style="min-width:0"><div style="font-weight:700;font-family:'Spectral',serif;font-size:1.02rem;overflow:hidden;text-overflow:ellipsis">${esc(t.name)}</div>
+      <div class="muted" style="font-size:.78rem;overflow:hidden;text-overflow:ellipsis">${esc(t.title||t.dept||t.email||'')}</div>
+      ${t.seeded?'<span class="badge badge-gold" style="margin-top:.35rem">Faculty</span>':'<span class="badge badge-accent" style="margin-top:.35rem">Your card</span>'}</div></button>`;
+  };
+  const createCardBtn=`<button class="card" onclick="createCard()" style="cursor:pointer;padding:1rem;display:flex;gap:.8rem;align-items:center;border-style:dashed;background:var(--surface-2)">
+    <div style="width:54px;height:54px;border-radius:12px;display:grid;place-items:center;background:var(--gold-soft);color:var(--gold);font-size:1.6rem">＋</div>
+    <div><div style="font-weight:700;font-family:'Spectral',serif">Create Your Card</div><div class="muted" style="font-size:.78rem">Not listed? Start a blank card.</div></div></button>`;
+  $('entry-cards').innerHTML=created.map(cardHTML).join('')+seeded.map(cardHTML).join('')+createCardBtn;
+}
+function selectTeacher(id){state.activeId=id;ui.tab='workspace';persist();route();}
+function createCard(){
+  const name=prompt('Enter the name for your new card:');if(!name||!name.trim())return;
+  const t=newTeacher({name:name.trim()});state.teachers.push(t);state.activeId=t.id;persist();route();
+  toast('Card created. Welcome — start with the AI box or any section.');
+}
+function switchTeacher(){state.activeId=null;persist();route();}
+function goWorkspace(){setTab('workspace');}
+
+function setTab(t){ui.tab=t;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));
+  $('view-workspace').classList.toggle('hidden',t!=='workspace');
+  $('view-resources').classList.toggle('hidden',t!=='resources');
+  $('view-howto').classList.toggle('hidden',t!=='howto');
+  if(t==='resources')renderResources();if(t==='howto')renderHowto();}
+function renderApp(){updateProviderPill();refreshCourseList();renderWorkspace();if(ui.tab==='resources')renderResources();if(ui.tab==='howto')renderHowto();}
+function updateProviderPill(){const p=state.settings.provider;const has=!!(state.settings.keys[p]);
+  const names={claude:'Claude',gemini:'Gemini',chatgpt:'ChatGPT',deepseek:'DeepSeek'};
+  $('provider-pill').innerHTML=`<span style="width:7px;height:7px;border-radius:50%;background:${has||p==='claude'?'#1f9d5b':'#cd7e1a'};display:inline-block"></span> ${names[p]}`;}
+function refreshCourseList(){$('dl-courses').innerHTML=getCourses().map(c=>`<option value="${esc(c)}">`).join('');}
+
+function getCourses(){const t=teacher();if(!t)return[];const s=new Set();(t.syllabi||[]).forEach(x=>{if(x.course)s.add(x.course);});return[...s];}
+function getRoster(){const t=teacher();return (t&&t.students)?t.students:[];}
+
+/* ---------------- SECTION SCHEMA ---------------- */
+const PROFILE_BLOCKS={
+ education:{title:'Education History',icon:'🎓',fields:[
+   {k:'degree',label:'Degree',type:'text'},{k:'field',label:'Field / Specialization',type:'text'},
+   {k:'institution',label:'Institution',type:'text'},{k:'year',label:'Year',type:'text'},{k:'note',label:'Notes',type:'textarea'}]},
+ experience:{title:'Job / Professional Experience',icon:'💼',fields:[
+   {k:'role',label:'Role / Title',type:'text'},{k:'org',label:'Organization',type:'text'},
+   {k:'from',label:'From',type:'text'},{k:'to',label:'To',type:'text'},{k:'note',label:'Responsibilities',type:'textarea'}]},
+ trainings:{title:'Trainings & Workshops',icon:'🛠️',fields:[
+   {k:'title',label:'Title',type:'text'},{k:'provider',label:'Provider',type:'text'},
+   {k:'year',label:'Year',type:'text'},{k:'note',label:'Notes',type:'textarea'}]},
+ trips:{title:'Trips / Tours / Field Visits',icon:'🧭',fields:[
+   {k:'title',label:'Title',type:'text'},{k:'place',label:'Place',type:'text'},
+   {k:'year',label:'Year',type:'text'},{k:'note',label:'Purpose / Notes',type:'textarea'}]},
+ conferences:{title:'Conferences / Seminars',icon:'🎤',fields:[
+   {k:'title',label:'Title',type:'text'},{k:'role',label:'Role',type:'select',options:['Presenter','Attendee','Organizer','Panelist','Keynote']},
+   {k:'venue',label:'Venue',type:'text'},{k:'year',label:'Year',type:'text'},{k:'note',label:'Notes',type:'textarea'}]},
+ awards:{title:'Awards & Recognitions',icon:'🏅',fields:[
+   {k:'title',label:'Award',type:'text'},{k:'by',label:'Awarded by',type:'text'},
+   {k:'year',label:'Year',type:'text'},{k:'note',label:'Notes',type:'textarea'}]}
+};
+const SECTIONS={
+ syllabus:{title:'Syllabus',icon:'📚',key:'syllabi',analyze:1,fields:[
+   {k:'course',label:'Course Title',type:'text'},{k:'code',label:'Course Code',type:'text'},
+   {k:'credit',label:'Credit Hours',type:'number'},{k:'semester',label:'Semester / Year',type:'text'},
+   {k:'desc',label:'Course Description',type:'textarea'},
+   {k:'weeks',label:'Weekly Breakdown',type:'repeater',cols:[{k:'week',label:'Week'},{k:'topic',label:'Topic'},{k:'readings',label:'Readings'}]},
+   {k:'refs',label:'References',type:'repeater',cols:[{k:'ref',label:'Reference'}]},
+   {k:'assessment',label:'Assessment Scheme',type:'textarea'}]},
+ lessonPlans:{title:'Lesson Plans',icon:'📝',key:'lessonPlans',analyze:1,fields:[
+   {k:'course',label:'Course',type:'course'},{k:'week',label:'Linked Syllabus Week',type:'text'},
+   {k:'topic',label:'Topic / Title',type:'text'},{k:'objectives',label:'Learning Objectives',type:'textarea'},
+   {k:'activities',label:'Activities',type:'textarea'},{k:'materials',label:'Materials',type:'textarea'},
+   {k:'time',label:'Time Allocation',type:'text'}]},
+ timetable:{title:'Time Table',icon:'🗓️',key:'timetable',custom:'timetable'},
+ students:{title:'Student Records',icon:'👥',key:'students',analyze:1,fields:[
+   {k:'name',label:'Student Name',type:'text'},{k:'roll',label:'Roll No.',type:'text'},
+   {k:'program',label:'Program',type:'text'},{k:'semester',label:'Semester',type:'text'},
+   {k:'participation',label:'Class Participation',type:'rating'},{k:'attitude',label:'Attitude / Conduct',type:'rating'},
+   {k:'performance',label:'Overall Performance',type:'rating'},
+   {k:'rapport',label:'Class Rapport / Conduct Notes',type:'textarea'},
+   {k:'strengths',label:'Strengths',type:'textarea'},{k:'improve',label:'Areas to Improve',type:'textarea'},
+   {k:'assignments',label:'Assignments & Tests',type:'repeater',cols:[{k:'title',label:'Title'},{k:'type',label:'Type'},{k:'max',label:'Max'},{k:'obt',label:'Obtained'},{k:'remarks',label:'Remarks'}]},
+   {k:'work',label:'Submitted Work / Answer (paste for AI analysis)',type:'textarea'},
+   {k:'notes',label:'Other Notes',type:'textarea'}]},
+ attendance:{title:'Attendance',icon:'✅',key:'attendance',custom:'attendance'},
+ labWork:{title:'Lab / Practical Work',icon:'⚖️',key:'labWork',analyze:1,fields:[
+   {k:'course',label:'Course',type:'course'},{k:'title',label:'Title',type:'text'},
+   {k:'type',label:'Type',type:'select',options:['Moot Court','Case Study','Practical','Presentation','Simulation','Other']},
+   {k:'date',label:'Date',type:'date'},{k:'participants',label:'Participants',type:'textarea'},
+   {k:'desc',label:'Description',type:'textarea'},{k:'outcome',label:'Outcome / Evaluation',type:'textarea'},
+   {k:'work',label:'Submission / Notes (paste for AI analysis)',type:'textarea'}]},
+ feedback:{title:'Feedback',icon:'💬',key:'feedback',analyze:1,fields:[
+   {k:'source',label:'Source',type:'select',options:['Student','Peer','Self','Supervisor','Other']},
+   {k:'course',label:'Course',type:'course'},{k:'date',label:'Date',type:'date'},
+   {k:'rating',label:'Rating',type:'rating'},{k:'comments',label:'Comments',type:'textarea'}]},
+ observations:{title:"Teacher's Observations / Reflections",icon:'🔎',key:'observations',analyze:1,fields:[
+   {k:'date',label:'Date',type:'date'},{k:'course',label:'Course',type:'course'},
+   {k:'title',label:'Title',type:'text'},{k:'notes',label:'Reflection',type:'textarea'}]},
+ research:{title:'Research & Publications',icon:'📄',key:'research',analyze:1,fields:[
+   {k:'title',label:'Title',type:'text'},{k:'type',label:'Type',type:'select',options:['Journal Article','Conference Paper','Book','Book Chapter','Working Paper','Other']},
+   {k:'venue',label:'Journal / Conference / Publisher',type:'text'},{k:'year',label:'Year',type:'number'},
+   {k:'coauthors',label:'Co-authors',type:'text'},{k:'link',label:'Link / DOI',type:'text'},{k:'abstract',label:'Abstract',type:'textarea'}]},
+ planning:{title:'Future Planning / Goals',icon:'🎯',key:'planning',analyze:1,fields:[
+   {k:'horizon',label:'Horizon',type:'select',options:['Short-term','Long-term']},{k:'title',label:'Goal',type:'text'},
+   {k:'category',label:'Category',type:'select',options:['Course Proposal','Skill Development','Research','Service','Other']},
+   {k:'details',label:'Details',type:'textarea'},{k:'target',label:'Target Date',type:'text'}]}
+};
+const SECTION_ORDER=['syllabus','lessonPlans','timetable','students','attendance','labWork','feedback','observations','research','planning'];
+function defForPath(path){if(path.startsWith('profile.'))return PROFILE_BLOCKS[path.split('.')[1]];return SECTIONS[path];}
+function getArr(path){const t=teacher();if(path.startsWith('profile.'))return t.profile[path.split('.')[1]];return t[SECTIONS[path].key];}
+const bodyId=path=>'body_'+path.replace(/\./g,'__');
+
+/* ---------------- WORKSPACE ---------------- */
+function renderWorkspace(){
+  const t=teacher();
+  const ph=t.photo?`<img src="${esc(t.photo)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'" style="width:66px;height:66px;border-radius:14px;object-fit:cover;border:1px solid var(--border)"><div style="display:none;width:66px;height:66px;border-radius:14px;background:var(--accent-soft);place-items:center;font-weight:700;font-size:1.3rem;color:var(--accent)">${esc(initials(t.name))}</div>`
+    :`<div style="display:grid;width:66px;height:66px;border-radius:14px;background:var(--accent-soft);place-items:center;font-weight:700;font-size:1.3rem;color:var(--accent)">${esc(initials(t.name))}</div>`;
+  let h=`<div class="card" style="padding:1.1rem;margin-bottom:1.1rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
+    ${ph}
+    <div style="min-width:200px;flex:1">
+      <h2 style="margin:0;font-size:1.35rem">${esc(t.name)}</h2>
+      <div class="muted" style="font-size:.9rem">${[t.title,t.dept].filter(Boolean).map(esc).join(' · ')||'<span class="faint">Add your title & department in Profile</span>'}</div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+        ${t.email?`<span class="chip">✉ ${esc(t.email)}</span>`:''}
+        ${t.profileUrl?`<a class="chip" href="${esc(t.profileUrl)}" target="_blank" rel="noopener">UoT profile ↗</a>`:''}
+      </div>
+    </div></div>`;
+  h+=aiBoxHTML();
+  h+=`<details class="card sec" open><summary><div class="sec-ico">🪪</div>
+    <div><div style="font-weight:600;font-family:'Spectral',serif;font-size:1.05rem">Profile &amp; Career History</div>
+    <div class="faint" style="font-size:.76rem">Unified record — education, experience, trainings, trips, conferences, awards</div></div>
+    <span class="chev">▶</span></summary><div class="sec-body" id="profile-body"></div></details>`;
+  for(const key of SECTION_ORDER){const d=SECTIONS[key];
+    h+=`<details class="card sec"><summary><div class="sec-ico">${d.icon}</div>
+      <div><div style="font-weight:600;font-family:'Spectral',serif;font-size:1.05rem">${esc(d.title)}</div></div>
+      <span class="chev">▶</span></summary><div class="sec-body" id="${bodyId(key)}"></div></details>`;
+  }
+  $('view-workspace').innerHTML=h;
+  let pf='';for(const sub in PROFILE_BLOCKS){const b=PROFILE_BLOCKS[sub];
+    pf+=`<details class="sub"><summary><span>${b.icon}</span> ${esc(b.title)} <span class="faint" style="font-weight:400;font-size:.78rem">(${getArr('profile.'+sub).length})</span></summary>
+      <div class="sub-body" id="${bodyId('profile.'+sub)}"></div></details>`;}
+  $('profile-body').innerHTML=pf;
+  for(const sub in PROFILE_BLOCKS)renderSectionBody('profile.'+sub);
+  for(const key of SECTION_ORDER)renderSectionBody(key);
+}
+function renderSectionBody(path){
+  const el=$(bodyId(path));if(!el)return;
+  const d=defForPath(path);
+  if(d.custom==='timetable')return el.innerHTML=timetableBody();
+  if(d.custom==='attendance')return el.innerHTML=attendanceBody();
+  el.innerHTML=genericBody(path,d);
+}
+
+/* ---------------- GENERIC ENTRY SECTION ---------------- */
+function genericBody(path,d){
+  const arr=getArr(path);let h='';
+  if(formOpen[path]){h+=entryForm(path,d);}
+  else{h+=`<button class="btn btn-primary btn-sm" onclick="openForm('${path}')">＋ Add Entry</button>`;}
+  if(arr.length===0&&!formOpen[path])h+=`<p class="empty">No entries yet — use "＋ Add Entry", or paste content into the AI box to auto-fill.</p>`;
+  h+=arr.map(e=>entryCard(path,d,e)).join('');
+  return h;
+}
+function fieldId(path,k){return 'fld_'+path.replace(/\./g,'__')+'__'+k;}
+function entryForm(path,d){
+  const editing=editingId[path]?getArr(path).find(x=>x.id===editingId[path]):null;
+  let h=`<div class="card" style="padding:1rem;margin-top:.4rem;background:var(--surface-2)">
+    <div style="font-weight:600;margin-bottom:.7rem">${editing?'Edit entry':'New entry'}</div><div class="grid-2">`;
+  d.fields.forEach(f=>{const full=(f.type==='textarea'||f.type==='repeater')?'style="grid-column:1/-1"':'';
+    h+=`<div ${full}>${buildInput(path,f,editing?editing[f.k]:undefined)}</div>`;});
+  h+=`</div><div id="custom_${path.replace(/\./g,'__')}" style="margin-top:.6rem"></div>`;
+  h+=`<div style="margin-top:.7rem"><label class="fld">Attachments (certificates / documents / photos)</label>
+    <input type="file" multiple class="input" onchange="onFilePick(this,'${path}')" style="font-size:.82rem;padding:.4rem">
+    <div id="files_${path.replace(/\./g,'__')}" style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.4rem"></div></div>`;
+  h+=`<div style="display:flex;gap:.5rem;margin-top:.9rem;flex-wrap:wrap">
+    <button class="btn btn-primary btn-sm" onclick="saveEntry('${path}')">${editing?'Save changes':'Save entry'}</button>
+    <button class="btn btn-sm btn-ghost" onclick="closeForm('${path}')">Cancel</button>
+    <button class="btn btn-sm btn-outline" onclick="addCustomField('${path}')" style="margin-left:auto">＋ Add Field</button>
+  </div></div>`;
+  setTimeout(()=>{
+    (pendingFiles[path]||[]).forEach(pf=>addFileChip(path,pf));
+    if(editing&&editing._custom)editing._custom.forEach(c=>addCustomField(path,c.label,c.value));
+  },0);
+  return h;
+}
+function buildInput(path,f,val){
+  const id=fieldId(path,f.k);const v=val==null?'':val;const lab=`<label class="fld" for="${id}">${esc(f.label)}</label>`;
+  if(f.type==='textarea')return lab+`<textarea id="${id}" class="textarea">${esc(v)}</textarea>`;
+  if(f.type==='number')return lab+`<input id="${id}" type="number" class="input" value="${esc(v)}">`;
+  if(f.type==='date')return lab+`<input id="${id}" type="date" class="input" value="${esc(v)}">`;
+  if(f.type==='select')return lab+`<select id="${id}" class="select"><option value="">—</option>${f.options.map(o=>`<option ${o===v?'selected':''}>${esc(o)}</option>`).join('')}</select>`;
+  if(f.type==='rating')return lab+`<select id="${id}" class="select"><option value="">—</option>${RATING.map(o=>`<option ${o===v?'selected':''}>${esc(o)}</option>`).join('')}</select>`;
+  if(f.type==='course')return lab+`<input id="${id}" class="input" list="dl-courses" value="${esc(v)}" placeholder="Type or pick a course from your Syllabus">`;
+  if(f.type==='repeater'){
+    const rid=id+'_rows';const rows=Array.isArray(v)?v:[];
+    let r=lab+`<div id="${rid}">`;rows.forEach(row=>r+=repRow(f,row));r+=`</div>`;
+    r+=`<button class="btn btn-xs btn-outline" type="button" onclick="addRepRow('${rid}','${path}','${f.k}')">＋ Add row</button>`;
+    return r;
+  }
+  return lab+`<input id="${id}" class="input" value="${esc(v)}">`;
+}
+function repRow(f,row){row=row||{};
+  return `<div class="rep-row">`+f.cols.map(c=>`<input class="input" data-k="${c.k}" placeholder="${esc(c.label)}" value="${esc(row[c.k]||'')}">`).join('')
+    +`<button class="btn btn-xs btn-ghost" type="button" onclick="this.parentElement.remove()" title="Remove">✕</button></div>`;
+}
+function addRepRow(rid,path,fk){const def=defForPath(path);const f=def.fields.find(x=>x.k===fk);
+  const c=$(rid);const wrap=document.createElement('div');wrap.innerHTML=repRow(f,{});c.appendChild(wrap.firstChild);}
+function addCustomField(path,label,value){
+  const c=$('custom_'+path.replace(/\./g,'__'));if(!c)return;
+  const lbl=label||prompt('Field name:');if(!lbl)return;
+  const wrap=document.createElement('div');wrap.className='cust-field';wrap.style.marginBottom='.5rem';
+  wrap.innerHTML=`<label class="fld">${esc(lbl)}</label><div style="display:flex;gap:.4rem">
+    <input class="input cf-val" data-label="${esc(lbl)}" value="${esc(value||'')}">
+    <button class="btn btn-xs btn-ghost" type="button" onclick="this.closest('.cust-field').remove()">✕</button></div>`;
+  c.appendChild(wrap);
+}
+function readField(path,f){
+  if(f.type==='repeater'){const rid=fieldId(path,f.k)+'_rows';const rows=[];
+    $(rid).querySelectorAll('.rep-row').forEach(r=>{const o={};let any=false;
+      r.querySelectorAll('input[data-k]').forEach(inp=>{o[inp.dataset.k]=inp.value.trim();if(inp.value.trim())any=true;});
+      if(any)rows.push(o);});return rows;}
+  const el=$(fieldId(path,f.k));return el?el.value.trim():'';
+}
+function openForm(path){editingId[path]=null;pendingFiles[path]=[];formOpen[path]=true;renderSectionBody(path);}
+function closeForm(path){formOpen[path]=false;editingId[path]=null;pendingFiles[path]=[];renderSectionBody(path);}
+function editEntry(path,id){const e=getArr(path).find(x=>x.id===id);editingId[path]=id;
+  pendingFiles[path]=(e._files||[]).map(x=>({...x}));formOpen[path]=true;renderSectionBody(path);}
+function deleteEntry(path,id){if(!confirm('Delete this entry? This cannot be undone.'))return;
+  const arr=getArr(path);const i=arr.findIndex(x=>x.id===id);if(i>=0)arr.splice(i,1);persist();renderSectionBody(path);refreshCourseList();toast('Entry deleted.');}
+function saveEntry(path){
+  const d=defForPath(path);const arr=getArr(path);
+  let base=editingId[path]?{...arr.find(x=>x.id===editingId[path])}:{id:uid(),_files:[],_ai:null,_custom:[]};
+  d.fields.forEach(f=>base[f.k]=readField(path,f));
+  base._files=pendingFiles[path]||[];
+  const cc=$('custom_'+path.replace(/\./g,'__'));base._custom=[];
+  if(cc)cc.querySelectorAll('.cf-val').forEach(inp=>{if(inp.value.trim())base._custom.push({label:inp.dataset.label,value:inp.value.trim()});});
+  if(editingId[path]){const i=arr.findIndex(x=>x.id===editingId[path]);arr[i]=base;}else arr.push(base);
+  formOpen[path]=false;editingId[path]=null;pendingFiles[path]=[];persist();renderSectionBody(path);refreshCourseList();
+  toast(path==='syllabus'?'Saved. Courses are now available to Lesson Plans, Time Table, Attendance & more.':'Entry saved.');
+}
+function onFilePick(inp,path){[...inp.files].forEach(f=>{const rd=new FileReader();
+  rd.onload=()=>{const pf={id:uid(),name:f.name,type:f.type,size:f.size,data:rd.result};
+    pendingFiles[path]=pendingFiles[path]||[];pendingFiles[path].push(pf);addFileChip(path,pf);};
+  rd.readAsDataURL(f);});inp.value='';}
+function addFileChip(path,pf){const c=$('files_'+path.replace(/\./g,'__'));if(!c)return;
+  const span=document.createElement('span');span.className='chip';span.dataset.id=pf.id;
+  span.innerHTML=`📎 ${esc(pf.name)} <button onclick="rmFile('${path}','${pf.id}',this)" style="border:none;background:none;cursor:pointer;color:var(--ink-faint)">✕</button>`;
+  c.appendChild(span);}
+function rmFile(path,id,btn){pendingFiles[path]=(pendingFiles[path]||[]).filter(x=>x.id!==id);btn.closest('.chip').remove();}
+
+function entryCard(path,d,e){
+  let rows='';
+  d.fields.forEach(f=>{const v=e[f.k];if(empty(v))return;rows+=`<div class="row"><div class="k">${esc(f.label)}</div><div class="v">${displayVal(f,v)}</div></div>`;});
+  (e._custom||[]).forEach(c=>{rows+=`<div class="row"><div class="k">${esc(c.label)}</div><div class="v">${esc(c.value)}</div></div>`;});
+  let files='';if(e._files&&e._files.length)files=`<div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem">`+
+    e._files.map(f=>f.data&&f.type&&f.type.startsWith('image/')?`<a href="${esc(f.data)}" target="_blank"><img src="${esc(f.data)}" style="height:46px;border-radius:6px;border:1px solid var(--border)"></a>`:`<a class="chip" ${f.data?`href="${esc(f.data)}" download="${esc(f.name)}"`:''} target="_blank">📎 ${esc(f.name)}</a>`).join('')+`</div>`;
+  const title=esc(e[d.fields[0].k]||'(untitled)');
+  return `<div class="entry">
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem">
+      <strong style="font-family:'Spectral',serif">${title}</strong>
+      <div style="margin-left:auto;display:flex;gap:.35rem">
+        ${d.analyze?`<button class="btn btn-xs btn-gold" onclick="analyzeEntry('${path}','${e.id}')">✦ AI Analyze</button>`:''}
+        <button class="btn btn-xs btn-outline" onclick="editEntry('${path}','${e.id}')">Edit</button>
+        <button class="btn btn-xs btn-danger" onclick="deleteEntry('${path}','${e.id}')">Delete</button>
+      </div></div>
+    ${rows}${files}
+    <div id="ai_${path.replace(/\./g,'__')}_${e.id}">${e._ai?verdictCard(e._ai):''}</div>
+  </div>`;
+}
+function displayVal(f,v){
+  if(f.type==='rating')return `<span class="rating-badge r-${RATING.includes(v)?v:'na'}">${esc(v)}</span>`;
+  if(f.type==='repeater'&&Array.isArray(v)){if(!v.length)return '';
+    return `<table class="mini-tbl"><tr>${f.cols.map(c=>`<th>${esc(c.label)}</th>`).join('')}</tr>`+
+      v.map(row=>`<tr>${f.cols.map(c=>`<td>${esc(row[c.k]||'')}</td>`).join('')}</tr>`).join('')+`</table>`;}
+  if(f.k==='link'&&v)return `<a href="${esc(v)}" target="_blank" rel="noopener">${esc(v)} ↗</a>`;
+  return esc(v).replace(/\n/g,'<br>');
+}
+function entryToText(d,e){let parts=[];d.fields.forEach(f=>{const v=e[f.k];if(empty(v))return;
+  if(f.type==='repeater'&&Array.isArray(v)){parts.push(f.label+':');v.forEach(r=>parts.push('  - '+f.cols.map(c=>r[c.k]).filter(Boolean).join(' | ')));}
+  else parts.push(f.label+': '+v);});(e._custom||[]).forEach(c=>parts.push(c.label+': '+c.value));return parts.join('\n');}
+
+/* ---------------- TIME TABLE (cross-linked to courses) ---------------- */
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat'];
+function timetableBody(){
+  const slots=teacher().timetable;
+  let h=`<button class="btn btn-primary btn-sm" onclick="openTTForm()">＋ Add Class Slot</button><div id="tt-form"></div>`;
+  const times=[...new Set(slots.map(s=>s.time).filter(Boolean))].sort();
+  if(slots.length===0)h+=`<p class="empty">No classes scheduled. Add a slot — the course list is pulled from your Syllabus.</p>`;
+  else{
+    h+=`<div style="overflow:auto;margin-top:.7rem"><table class="tt-grid"><tr><th>Time</th>${DAYS.map(d=>`<th>${d}</th>`).join('')}</tr>`;
+    times.forEach(tm=>{h+=`<tr><td style="font-weight:600;white-space:nowrap">${esc(tm)}</td>`;
+      DAYS.forEach(day=>{const cell=slots.filter(s=>s.time===tm&&s.day===day);
+        h+=`<td>${cell.map(s=>`<div class="tt-cell" title="${esc(s.room||'')}">${esc(s.course||'')}${s.room?'<br><span style="opacity:.7;font-weight:400">'+esc(s.room)+'</span>':''}<br><button onclick="rmSlot('${s.id}')" style="border:none;background:none;color:var(--ink-faint);cursor:pointer;font-size:.7rem">✕</button></div>`).join('')}</td>`;});
+      h+=`</tr>`;});
+    h+=`</table></div>`;
+  }
+  return h;
+}
+function openTTForm(){const courses=getCourses();
+  $('tt-form').innerHTML=`<div class="card" style="padding:.9rem;margin-top:.5rem;background:var(--surface-2)"><div class="grid-2">
+    <div><label class="fld">Course</label><input id="tt-course" class="input" list="dl-courses" placeholder="Pick from Syllabus or type"></div>
+    <div><label class="fld">Day</label><select id="tt-day" class="select">${DAYS.map(d=>`<option>${d}</option>`).join('')}</select></div>
+    <div><label class="fld">Time (e.g. 09:00–10:00)</label><input id="tt-time" class="input" placeholder="09:00–10:00"></div>
+    <div><label class="fld">Room</label><input id="tt-room" class="input" placeholder="Room / Hall"></div>
+    </div><div style="display:flex;gap:.5rem;margin-top:.7rem"><button class="btn btn-primary btn-sm" onclick="saveSlot()">Add slot</button>
+    <button class="btn btn-sm btn-ghost" onclick="renderSectionBody('timetable')">Cancel</button></div>
+    ${courses.length===0?'<p class="empty">Tip: add a Syllabus first so courses appear in the picker.</p>':''}</div>`;
+}
+function saveSlot(){const c=$('tt-course').value.trim();const tm=$('tt-time').value.trim();
+  if(!c||!tm){toast('Add a course and a time.','warn');return;}
+  teacher().timetable.push({id:uid(),course:c,day:$('tt-day').value,time:tm,room:$('tt-room').value.trim()});
+  persist();renderSectionBody('timetable');toast('Slot added.');}
+function rmSlot(id){const tt=teacher().timetable;const i=tt.findIndex(x=>x.id===id);if(i>=0)tt.splice(i,1);persist();renderSectionBody('timetable');}
+
+/* ---------------- ATTENDANCE (cross-linked to roster) ---------------- */
+function attendanceBody(){
+  const t=teacher();const roster=getRoster();
+  let h=`<button class="btn btn-primary btn-sm" onclick="openAttForm()">＋ New Session</button><div id="att-form"></div>`;
+  if(roster.length===0)h+=`<p class="empty">Add students in <strong>Student Records</strong> first — Attendance shares that roster.</p>`;
+  else if(t.attendance.length===0)h+=`<p class="empty">No sessions yet. Start one to mark attendance.</p>`;
+  t.attendance.slice().reverse().forEach(s=>{
+    const present=Object.values(s.marks).filter(v=>v==='P').length;const total=Object.keys(s.marks).length;
+    h+=`<div class="entry"><div style="display:flex;align-items:center;gap:.5rem">
+      <strong style="font-family:'Spectral',serif">${esc(s.course||'Session')} · ${esc(s.date||'')}</strong>
+      <span class="chip">${present}/${total} present</span>
+      <button class="btn btn-xs btn-danger" style="margin-left:auto" onclick="rmSession('${s.id}')">Delete</button></div>`;
+    roster.forEach(st=>{const mk=s.marks[st.id]||'P';
+      h+=`<div class="att-row"><div style="flex:1;font-size:.85rem">${esc(st.name||'(unnamed)')}${st.roll?' <span class="faint">· '+esc(st.roll)+'</span>':''}</div>
+        <div class="seg-pick">
+          <button class="${mk==='P'?'on-P':''}" onclick="mark('${s.id}','${st.id}','P')">P</button>
+          <button class="${mk==='A'?'on-A':''}" onclick="mark('${s.id}','${st.id}','A')">A</button>
+          <button class="${mk==='L'?'on-L':''}" onclick="mark('${s.id}','${st.id}','L')">L</button>
+        </div></div>`;});
+    h+=`</div>`;});
+  return h;
+}
+function openAttForm(){if(getRoster().length===0){toast('Add students first.','warn');return;}
+  $('att-form').innerHTML=`<div class="card" style="padding:.9rem;margin-top:.5rem;background:var(--surface-2)"><div class="grid-2">
+    <div><label class="fld">Course</label><input id="att-course" class="input" list="dl-courses"></div>
+    <div><label class="fld">Date</label><input id="att-date" type="date" class="input" value="${new Date().toISOString().slice(0,10)}"></div>
+    </div><div style="display:flex;gap:.5rem;margin-top:.7rem"><button class="btn btn-primary btn-sm" onclick="saveSession()">Start session</button>
+    <button class="btn btn-sm btn-ghost" onclick="renderSectionBody('attendance')">Cancel</button></div></div>`;
+}
+function saveSession(){const marks={};getRoster().forEach(s=>marks[s.id]='P');
+  teacher().attendance.push({id:uid(),course:$('att-course').value.trim(),date:$('att-date').value,marks});
+  persist();renderSectionBody('attendance');toast('Session started — everyone marked present by default.');}
+function mark(sid,stid,v){const s=teacher().attendance.find(x=>x.id===sid);if(!s)return;s.marks[stid]=v;persist();renderSectionBody('attendance');}
+function rmSession(id){if(!confirm('Delete this attendance session?'))return;const a=teacher().attendance;const i=a.findIndex(x=>x.id===id);if(i>=0)a.splice(i,1);persist();renderSectionBody('attendance');}
+
+/* ---------------- AI VERDICT + ANALYZE ---------------- */
+function verdictCard(ai){
+  if(ai.raw)return `<div class="verdict r-na"><div class="verdict-body"><div class="vsec-title">AI response</div><div style="white-space:pre-wrap">${esc(ai.raw)}</div></div></div>`;
+  const v=RATING.includes(ai.verdict)?ai.verdict:'na';const idx=RATING.indexOf(ai.verdict);
+  const list=(arr,t)=>arr&&arr.length?`<div class="vsec-title">${t}</div><ul class="vlist">${arr.map(x=>`<li>${esc(typeof x==='string'?x:JSON.stringify(x))}</li>`).join('')}</ul>`:'';
+  const terms=ai.keyTerms&&ai.keyTerms.length?`<div class="vsec-title">Terminology</div><ul class="vlist">${ai.keyTerms.map(k=>`<li><strong>${esc(k.term||'')}</strong> — ${esc(k.note||'')}</li>`).join('')}</ul>`:'';
+  const acc=ai.accuracy&&ai.accuracy.length?`<div class="vsec-title">Accuracy / Fact-check</div><ul class="vlist">${ai.accuracy.map(a=>`<li><span class="rating-badge r-${a.status==='correct'?'Excellent':a.status==='incorrect'?'Poor':'Fair'}">${esc(a.status||'')}</span> ${esc(a.point||'')}${a.note?' — '+esc(a.note):''}</li>`).join('')}</ul>`:'';
+  return `<div class="verdict r-${v}">
+    <div class="verdict-head"><span class="badge badge-ai">✦ AI Assessment</span>
+      <strong style="font-family:'Spectral',serif">${esc(ai.verdict||'—')}</strong>
+      <span class="verdict-score">${ai.score!=null?esc(ai.score):'–'}<span style="font-size:.7rem;color:var(--ink-faint)">/100</span></span></div>
+    <div class="meter">${RATING.map((_,i)=>`<div class="seg ${idx>=0&&i<=idx?'on':''}"></div>`).join('')}</div>
+    <div class="meter-labels">${RATING.map(r=>`<span>${r}</span>`).join('')}</div>
+    <div class="verdict-body">
+      ${ai.summary?`<div style="margin-bottom:.3rem">${esc(ai.summary)}</div>`:''}
+      ${list(ai.strengths,'Strengths')}${list(ai.improvements,'Areas to improve')}${terms}${acc}${list(ai.nextSteps,'Suggested next steps')}
+    </div></div>`;
+}
+async function analyzeEntry(path,id){
+  const d=defForPath(path);const e=getArr(path).find(x=>x.id===id);if(!e)return;
+  const slot=$('ai_'+path.replace(/\./g,'__')+'_'+id);
+  slot.innerHTML=`<div class="verdict r-na"><div class="verdict-body" style="display:flex;align-items:center;gap:.5rem"><span class="spin"></span> Analyzing…</div></div>`;
+  try{
+    const content=entryToText(d,e);
+    if(!content.trim()){slot.innerHTML='';toast('Nothing to analyze in this entry yet.','warn');return;}
+    const out=await callAI(analysisPrompt(d.title,content));
+    const j=parseJSON(out)||{raw:out};e._ai=j;persist();slot.innerHTML=verdictCard(j);
+  }catch(err){slot.innerHTML='';handleAIError(err);}
+}
+function analysisPrompt(label,content){
+ return `You are an experienced law-faculty mentor and academic assessor at a university. Analyze the following "${label}" content from a teacher's workspace.
+Assess: academic quality; correctness of terminology and legal/technical concepts; factual and mathematical accuracy; clarity; and completeness. If it is student work (an answer, assignment, quiz, exam, or marks), grade it as a teacher would.
+Respond with ONLY a valid JSON object (no markdown fences, no prose outside JSON) of this exact shape:
+{"verdict":"Poor|Fair|Good|Excellent","score":<integer 0-100>,"summary":"<one or two sentences>","strengths":["..."],"improvements":["..."],"keyTerms":[{"term":"...","note":"correct/incorrect/clarification"}],"accuracy":[{"point":"...","status":"correct|incorrect|unclear","note":"..."}],"nextSteps":["..."]}
+Use empty arrays where a section does not apply. Keep every item to one short sentence.
+
+CONTENT:
+"""${content.slice(0,6000)}"""`;
+}
+
+/* ---------------- AI BOX: classify -> suggest -> confirm -> populate ---------------- */
+function aiBoxHTML(){
+  return `<div class="card" style="padding:1.1rem;margin-bottom:1.1rem;border:1px solid var(--border-strong);position:relative;overflow:hidden">
+    <div style="position:absolute;inset:0;background:linear-gradient(120deg,var(--accent-soft),transparent 40%,var(--gold-soft));opacity:.5;pointer-events:none"></div>
+    <div style="position:relative">
+    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem">
+      <span class="badge badge-ai">✦ AI Box</span>
+      <div style="font-weight:600;font-family:'Spectral',serif;font-size:1.05rem">Paste, drop a doc, or add an image</div>
+    </div>
+    <textarea id="aibox-text" class="textarea" style="min-height:96px" placeholder="Paste a syllabus, lesson plan, list of student marks, feedback, a publication abstract — anything. The AI detects what it is, shows a preview, and only fills the right section after you confirm."></textarea>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-top:.6rem">
+      <label class="btn btn-sm btn-outline" style="cursor:pointer">📄 Attach doc<input type="file" accept=".txt,.md,.csv,.json,.pdf,.doc,.docx" onchange="aiAttachDoc(this)" style="display:none"></label>
+      <label class="btn btn-sm btn-outline" style="cursor:pointer">🖼️ Add image (OCR)<input type="file" accept="image/*" onchange="aiAttachImg(this)" style="display:none"></label>
+      <span id="aibox-attach" class="faint" style="font-size:.78rem"></span>
+      <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="aiClassify()">Analyze &amp; classify</button>
+    </div>
+    <div id="aibox-result" style="margin-top:.8rem"></div>
+    </div></div>`;
+}
+function aiAttachDoc(inp){const f=inp.files[0];if(!f)return;
+  if(/\.(txt|md|csv|json)$/i.test(f.name)){const rd=new FileReader();rd.onload=()=>{
+    $('aibox-text').value=($('aibox-text').value+'\n'+rd.result).trim();$('aibox-attach').textContent='Loaded: '+f.name;};rd.readAsText(f);}
+  else{$('aibox-attach').textContent=f.name+' attached — paste its text above (in-browser PDF/DOC parsing is out of scope for v1).';}
+  inp.value='';}
+function aiAttachImg(inp){const f=inp.files[0];if(!f)return;const rd=new FileReader();
+  rd.onload=()=>{aiImg=rd.result;$('aibox-attach').textContent='Image ready for OCR: '+f.name;};rd.readAsDataURL(f);inp.value='';}
+async function aiClassify(){
+  const res=$('aibox-result');let text=$('aibox-text').value.trim();
+  if(!text&&!aiImg){toast('Paste some text or add an image first.','warn');return;}
+  res.innerHTML=`<div class="verdict r-na"><div class="verdict-body" style="display:flex;align-items:center;gap:.5rem"><span class="spin"></span> ${aiImg?'Reading image, then classifying…':'Classifying…'}</div></div>`;
+  try{
+    if(aiImg){const ocr=await callAI('Extract ALL readable text from this image exactly, preserving structure. Return only the text.',aiImg);text=(text+'\n'+ocr).trim();}
+    const out=await callAI(classifyPrompt(text));
+    const j=parseJSON(out);
+    if(!j){res.innerHTML=`<div class="verdict r-na"><div class="verdict-body"><div class="vsec-title">Could not structure this automatically</div><div style="white-space:pre-wrap">${esc(out)}</div></div></div>`;return;}
+    lastClassify=j;renderClassify(j);
+  }catch(err){res.innerHTML='';handleAIError(err);}
+}
+function classifyPrompt(content){
+ return `You classify academic content pasted by a law teacher and extract structured data for their workspace.
+Allowed destination section keys: syllabus, lessonPlans, students, labWork, feedback, observations, research, planning, profile, timetable.
+Read the content, decide the most likely destination(s), and extract entries with fields matching that section.
+Return ONLY valid JSON (no markdown) of shape:
+{"type":"<human-friendly label>","confidence":"high|medium|low","summary":"<one line>","destinations":["<key>"],"entries":[{"section":"<key>","label":"<short preview label>","fields":{}}]}
+Field guidance:
+- syllabus: course, code, credit, semester, desc, weeks:[{week,topic,readings}], refs:[{ref}], assessment
+- students: ONE entry per student -> name, roll, program, semester, performance(Poor/Fair/Good/Excellent), assignments:[{title,type,max,obt,remarks}], notes
+- lessonPlans: course, week, topic, objectives, activities, materials, time
+- labWork: course, title, type, date, participants, desc, outcome
+- feedback: source, course, date, rating(Poor/Fair/Good/Excellent), comments
+- research: title, type, venue, year, coauthors, link, abstract
+- planning: horizon, title, category, details, target
+- observations: date, course, title, notes
+List up to 3 most likely keys in destinations. If unsure, set confidence "low" and still give your best guess. Never invent specific people or facts not present in the content.
+
+CONTENT:
+"""${content.slice(0,7000)}"""`;
+}
+const SECNAME=k=>({syllabus:'Syllabus',lessonPlans:'Lesson Plans',students:'Student Records',labWork:'Lab / Practical Work',feedback:'Feedback',observations:'Observations',research:'Research & Publications',planning:'Future Planning',profile:'Profile & Career',timetable:'Time Table'}[k]||k);
+function renderClassify(j){
+  const dests=(j.destinations||[]).filter(d=>SECNAME(d));
+  const conf=j.confidence||'low';const cc=conf==='high'?'Excellent':conf==='medium'?'Good':'Fair';
+  let prev='';(j.entries||[]).slice(0,8).forEach(e=>{
+    prev+=`<div class="entry" style="margin-top:.5rem"><div style="display:flex;gap:.5rem;align-items:center"><span class="chip">${esc(SECNAME(e.section))}</span><strong>${esc(e.label||'')}</strong></div>
+      <div class="muted" style="font-size:.8rem;margin-top:.3rem">${esc(Object.entries(e.fields||{}).slice(0,5).map(([k,v])=>k+': '+(Array.isArray(v)?v.length+' items':String(v).slice(0,60))).join('  ·  '))}</div></div>`;});
+  $('aibox-result').innerHTML=`<div class="card" style="padding:.9rem;background:var(--surface-2)">
+    <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+      <span class="badge badge-accent">Detected</span><strong style="font-family:'Spectral',serif">${esc(j.type||'Unknown')}</strong>
+      <span class="rating-badge r-${cc}">${esc(conf)} confidence</span></div>
+    ${j.summary?`<div class="muted" style="font-size:.86rem;margin-top:.35rem">${esc(j.summary)}</div>`:''}
+    <div class="vsec-title">Parsed preview (${(j.entries||[]).length})</div>${prev||'<p class="empty">No structured entries extracted.</p>'}
+    <div class="vsec-title">Suggested destination — pick one to review &amp; confirm</div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.4rem">
+      ${(dests.length?dests:['syllabus','students','observations']).map(d=>`<button class="btn btn-sm btn-primary" onclick="aiStage('${d}')">Populate ${esc(SECNAME(d))}</button>`).join('')}
+      <button class="btn btn-sm btn-ghost" onclick="$('aibox-result').innerHTML=''">Dismiss</button>
+    </div>
+    <p class="faint" style="font-size:.74rem;margin-top:.5rem">Nothing is saved until you confirm on the next step.</p>
+  </div>`;
+}
+function aiStage(destKey){
+  if(!lastClassify)return;
+  let entries=(lastClassify.entries||[]).filter(e=>e.section===destKey);
+  if(!entries.length)entries=(lastClassify.entries||[]).map(e=>({...e,section:destKey}));
+  if(!entries.length)entries=[{section:destKey,fields:{}}];
+  const d=destKey==='profile'?PROFILE_BLOCKS.experience:(destKey==='timetable'?null:SECTIONS[destKey]);
+  let rowsHTML=entries.map(e=>{
+    const fields=e.fields||{};let fl='';
+    (d&&d.fields?d.fields:[]).forEach(f=>{const v=fields[f.k];if(empty(v))return;
+      fl+=`<div class="row"><div class="k">${esc(f.label)}</div><div class="v">${Array.isArray(v)?esc(v.length+' items'):esc(String(v)).replace(/\n/g,'<br>')}</div></div>`;});
+    Object.entries(fields).forEach(([k,v])=>{if(d&&d.fields&&d.fields.some(f=>f.k===k))return;if(empty(v))return;
+      fl+=`<div class="row"><div class="k">${esc(k)}</div><div class="v">${Array.isArray(v)?esc(v.length+' items'):esc(String(v))}</div></div>`;});
+    return `<div class="entry">${fl||'<span class="muted">(empty)</span>'}</div>`;
+  }).join('');
+  $('confirm-mount').innerHTML=`<div class="overlay" onclick="if(event.target===this)closeConfirm()">
+    <div class="modal modal-wide" style="padding:1.2rem">
+      <div style="display:flex;align-items:center;gap:.5rem"><span class="badge badge-ai">✦ Confirm before saving</span></div>
+      <h3 style="margin:.5rem 0">Add ${entries.length} entr${entries.length>1?'ies':'y'} to ${esc(SECNAME(destKey))}?</h3>
+      <p class="muted" style="font-size:.85rem;margin-top:0">Review the parsed fields below. After saving, every field stays fully editable in the section — the AI only drafts.</p>
+      ${rowsHTML}
+      <div style="display:flex;gap:.5rem;margin-top:1rem;justify-content:flex-end">
+        <button class="btn btn-ghost" onclick="closeConfirm()">Cancel</button>
+        <button class="btn btn-primary" onclick="aiCommit('${destKey}')">Confirm &amp; add to ${esc(SECNAME(destKey))}</button>
+      </div></div></div>`;
+  window._stage=entries;
+}
+function closeConfirm(){$('confirm-mount').innerHTML='';}
+function aiCommit(destKey){
+  const entries=window._stage||[];const t=teacher();
+  let targetPath=destKey;
+  if(destKey==='profile')targetPath='profile.experience';
+  if(destKey==='timetable'){entries.forEach(e=>{const f=e.fields||{};t.timetable.push({id:uid(),course:f.course||'',day:f.day||'Mon',time:f.time||'',room:f.room||''});});}
+  else{const d=defForPath(targetPath);const arr=getArr(targetPath);
+    entries.forEach(e=>arr.push(mapToEntry(d,e.fields||{})));}
+  persist();closeConfirm();$('aibox-result').innerHTML='';$('aibox-text').value='';aiImg=null;if($('aibox-attach'))$('aibox-attach').textContent='';
+  refreshCourseList();renderWorkspace();
+  toast('Added to '+SECNAME(destKey)+'. Open the section to review or edit.');
+}
+function mapToEntry(d,fields){
+  const e={id:uid(),_files:[],_ai:null,_custom:[]};
+  d.fields.forEach(f=>{let v=fields[f.k];
+    if(f.type==='repeater'){if(Array.isArray(v))e[f.k]=v.map(r=>{const o={};f.cols.forEach(c=>o[c.k]=r[c.k]!=null?String(r[c.k]):'');return o;});else e[f.k]=[];}
+    else if(f.type==='rating')e[f.k]=RATING.includes(v)?v:'';
+    else e[f.k]=v!=null?(typeof v==='object'?JSON.stringify(v):String(v)):'';});
+  Object.entries(fields).forEach(([k,v])=>{if(d.fields.some(f=>f.k===k))return;if(empty(v))return;
+    e._custom.push({label:k,value:typeof v==='object'?JSON.stringify(v):String(v)});});
+  return e;
+}
+
+/* ---------------- MULTI-PROVIDER callAI ---------------- */
+class NoKeyError extends Error{constructor(p){super(p);this.provider=p;this.noKey=true;}}
+function activeProvider(){return state.settings.provider;}
+function activeKey(){return (state.settings.keys||{})[activeProvider()]||'';}
+async function callAI(prompt,imageData){
+  const p=activeProvider();const key=activeKey();
+  if(p!=='claude'&&!key)throw new NoKeyError(p);
+  if(p==='claude')return claudeCall(prompt,key,imageData);
+  if(p==='gemini')return geminiCall(prompt,key,imageData);
+  if(p==='chatgpt')return openaiCall('https://api.openai.com/v1/chat/completions','gpt-4o-mini',prompt,key,imageData);
+  if(p==='deepseek')return openaiCall('https://api.deepseek.com/chat/completions','deepseek-chat',prompt,key,imageData);
+  throw new Error('Unknown provider');
+}
+async function claudeCall(prompt,key,imageData){
+  const content=imageData?[{type:'image',source:{type:'base64',media_type:mimeOf(imageData),data:b64Of(imageData)}},{type:'text',text:prompt}]:prompt;
+  const headers={'Content-Type':'application/json'};
+  if(key){headers['x-api-key']=key;headers['anthropic-version']='2023-06-01';headers['anthropic-dangerous-direct-browser-access']='true';}
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers,
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1600,messages:[{role:'user',content}]})});
+  if(!r.ok)throw new Error('Claude API '+r.status+': '+(await r.text()).slice(0,180));
+  const d=await r.json();return (d.content||[]).map(b=>b.type==='text'?b.text:'').join('');
+}
+async function geminiCall(prompt,key,imageData){
+  const parts=[{text:prompt}];if(imageData)parts.unshift({inline_data:{mime_type:mimeOf(imageData),data:b64Of(imageData)}});
+  const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+encodeURIComponent(key),
+    {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}]})});
+  if(!r.ok)throw new Error('Gemini API '+r.status+': '+(await r.text()).slice(0,180));
+  const d=await r.json();return (d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts||[]).map(p=>p.text||'').join('');
+}
+async function openaiCall(url,model,prompt,key,imageData){
+  const content=imageData?[{type:'text',text:prompt},{type:'image_url',image_url:{url:imageData}}]:prompt;
+  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+    body:JSON.stringify({model,messages:[{role:'user',content}],max_tokens:1600})});
+  if(!r.ok)throw new Error((model.indexOf('deepseek')>=0?'DeepSeek':'OpenAI')+' API '+r.status+': '+(await r.text()).slice(0,180));
+  const d=await r.json();return d.choices&&d.choices[0]&&d.choices[0].message?d.choices[0].message.content:'';
+}
+const mimeOf=u=>{const m=/data:(.*?);/.exec(u);return m?m[1]:'image/png';};
+const b64Of=u=>u.split(',')[1]||'';
+function parseJSON(s){if(!s)return null;let t=String(s).trim().replace(/^```(?:json)?/i,'').replace(/```\s*$/,'').trim();
+  const a=t.indexOf('{'),b=t.lastIndexOf('}');if(a>=0&&b>a)t=t.slice(a,b+1);try{return JSON.parse(t);}catch(e){return null;}}
+function parseJSONArr(s){if(!s)return null;let t=String(s).trim().replace(/^```(?:json)?/i,'').replace(/```\s*$/,'').trim();
+  const a=t.indexOf('['),b=t.lastIndexOf(']');if(a>=0&&b>a)t=t.slice(a,b+1);try{const v=JSON.parse(t);return Array.isArray(v)?v:null;}catch(e){return null;}}
+function handleAIError(err){
+  if(err&&err.noKey){const n={gemini:'Gemini',chatgpt:'ChatGPT',deepseek:'DeepSeek'}[err.provider]||err.provider;
+    toast('Add your '+n+' API key in Settings to use this feature.','warn');openSettings();return;}
+  console.error(err);toast((err&&err.message)?err.message:'AI request failed.','err');
+}
+
+/* ---------------- SETTINGS ---------------- */
+const PROVIDERS=[
+ {k:'claude',n:'Claude (Anthropic)',hint:'Works in the in-app preview without a key. For a deployed copy, paste an Anthropic API key.'},
+ {k:'gemini',n:'Gemini (Google)',hint:'Get a free key at aistudio.google.com'},
+ {k:'chatgpt',n:'ChatGPT (OpenAI)',hint:'Get a key at platform.openai.com'},
+ {k:'deepseek',n:'DeepSeek',hint:'Get a key at platform.deepseek.com'}];
+function openSettings(){
+  const s=state.settings;
+  $('settings-mount').innerHTML=`<div class="overlay" onclick="if(event.target===this)closeSettings()">
+    <div class="modal" style="padding:1.3rem">
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.3rem"><span class="badge badge-accent">Settings</span></div>
+      <h3 style="margin:.3rem 0 1rem">AI provider, keys &amp; theme</h3>
+      <label class="fld">Active AI provider</label>
+      <select id="set-provider" class="select" onchange="renderKeyHint()">
+        ${PROVIDERS.map(p=>`<option value="${p.k}" ${s.provider===p.k?'selected':''}>${esc(p.n)}</option>`).join('')}
+      </select>
+      <p id="set-hint" class="faint" style="font-size:.78rem;margin:.4rem 0 1rem"></p>
+      <label class="fld">API keys (stored only in this browser)</label>
+      <div style="display:flex;flex-direction:column;gap:.55rem">
+        ${PROVIDERS.map(p=>`<div>
+          <div style="font-size:.78rem;font-weight:600;margin-bottom:.25rem">${esc(p.n)}</div>
+          <div style="display:flex;gap:.4rem">
+            <input id="key-${p.k}" type="password" class="input" placeholder="${p.k==='claude'?'optional in preview — needed once deployed':'paste key'}" value="${esc(s.keys[p.k]||'')}">
+            <button class="btn btn-sm btn-outline" type="button" onclick="toggleKey('key-${p.k}',this)">Show</button>
+          </div></div>`).join('')}
+      </div>
+      <label class="fld" style="margin-top:1rem">Theme</label>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        ${[['light','Professional'],['dark','Focus'],['heritage','Heritage']].map(([k,n])=>`<button data-theme-btn="${k}" class="btn btn-sm ${s.theme===k?'btn-primary':'btn-outline'}" onclick="setTheme('${k}')">${n}</button>`).join('')}
+      </div>
+      <div style="display:flex;gap:.5rem;margin-top:1.3rem;justify-content:flex-end">
+        <button class="btn btn-ghost" onclick="closeSettings()">Close</button>
+        <button class="btn btn-primary" onclick="saveSettings()">Save settings</button>
+      </div>
+      <p class="faint" style="font-size:.72rem;margin-top:.8rem">Keys are saved in your browser's localStorage and sent only directly to that provider's API — never to any other server.</p>
+    </div></div>`;
+  renderKeyHint();
+}
+function renderKeyHint(){const k=$('set-provider').value;const p=PROVIDERS.find(x=>x.k===k);if($('set-hint'))$('set-hint').textContent=p?p.hint:'';}
+function toggleKey(id,btn){const el=$(id);if(el.type==='password'){el.type='text';btn.textContent='Hide';}else{el.type='password';btn.textContent='Show';}}
+function setTheme(k){state.settings.theme=k;applyTheme();persist();
+  document.querySelectorAll('[data-theme-btn]').forEach(b=>{b.classList.toggle('btn-primary',b.dataset.themeBtn===k);b.classList.toggle('btn-outline',b.dataset.themeBtn!==k);});
+  renderApp();}
+function closeSettings(){$('settings-mount').innerHTML='';}
+function saveSettings(){
+  state.settings.provider=$('set-provider').value;
+  PROVIDERS.forEach(p=>{state.settings.keys[p.k]=$('key-'+p.k).value.trim();});
+  persist();closeSettings();updateProviderPill();toast('Settings saved.');
+}
+
+/* ---------------- RESOURCE LIBRARY ---------------- */
+const RES_CATS=['Books & Casebooks','Databases','Teaching Guides','Tips & Best Practices','Video & Media'];
+const RESOURCES=[
+ {cat:'Books & Casebooks',title:'eLangdell Press (CALI)',desc:'Free, peer-reviewed open law textbooks and casebooks across many subjects.',url:'https://www.cali.org/books'},
+ {cat:'Books & Casebooks',title:'H2O Open Casebooks (Harvard)',desc:'Free, remixable casebooks created and shared by law professors.',url:'https://opencasebook.org'},
+ {cat:'Books & Casebooks',title:'LibreTexts — Law',desc:'Open-access legal texts and course materials you can adapt.',url:'https://biz.libretexts.org'},
+ {cat:'Databases',title:'WorldLII',desc:'Free access to worldwide legal materials — cases, legislation and journals.',url:'http://www.worldlii.org'},
+ {cat:'Databases',title:'CommonLII (incl. Pakistan)',desc:'Legal information from common-law countries, including Pakistan.',url:'http://www.commonlii.org'},
+ {cat:'Databases',title:'Pakistan Code',desc:'Official consolidated federal statutes of Pakistan.',url:'https://pakistancode.gov.pk'},
+ {cat:'Databases',title:'AsianLII',desc:'Free legal databases covering Asian jurisdictions.',url:'http://www.asianlii.org'},
+ {cat:'Teaching Guides',title:'UNODC E4J University Modules',desc:'Ready-made teaching modules on rule of law, justice and integrity.',url:'https://www.unodc.org/e4j/en/tertiary/index.html'},
+ {cat:'Teaching Guides',title:'SSRN — Legal Education',desc:'Working papers on legal pedagogy and curriculum design.',url:'https://www.ssrn.com'},
+ {cat:'Tips & Best Practices',title:'Best Practices for Legal Education',desc:'Open report on outcomes-based, student-centred legal teaching.',url:'https://www.bestpracticeslegaled.com'},
+ {cat:'Tips & Best Practices',title:'Stanford Teaching Commons',desc:'Practical guides on questioning, discussion and active learning.',url:'https://teachingcommons.stanford.edu'},
+ {cat:'Video & Media',title:'Oyez',desc:'Audio, transcripts and summaries of landmark oral arguments.',url:'https://www.oyez.org'},
+ {cat:'Video & Media',title:'Yale Law School (YouTube)',desc:'Public lectures and panels from leading legal scholars.',url:'https://www.youtube.com/@YaleLawSchool'}
+];
+function renderResources(){
+  const card=r=>`<a class="card" href="${esc(r.url)}" target="_blank" rel="noopener" style="display:block;padding:.9rem;text-decoration:none">
+    <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.3rem;flex-wrap:wrap"><span class="badge badge-accent">${esc(r.cat)}</span>${r.ai?'<span class="badge badge-gold">AI suggested</span>':''}</div>
+    <div style="font-weight:700;font-family:'Spectral',serif;color:var(--ink)">${esc(r.title)} ↗</div>
+    <div class="muted" style="font-size:.83rem;margin-top:.25rem">${esc(r.desc)}</div></a>`;
+  let h=`<div class="card" style="padding:1.1rem;margin-bottom:1.1rem">
+    <h2 style="margin:0 0 .2rem">Resource Library</h2>
+    <p class="muted" style="margin:0;font-size:.9rem">Curated free, open-access legal teaching resources — plus AI-suggested extras for any topic.</p>
+    <div style="display:flex;gap:.5rem;margin-top:.9rem;flex-wrap:wrap">
+      <input id="res-q" class="input" style="flex:1;min-width:200px" placeholder="Ask for more — e.g. 'open resources on international humanitarian law'">
+      <button class="btn btn-primary" onclick="aiSuggestRes()">✦ Suggest more</button>
+    </div><div id="res-ai"></div></div>`;
+  RES_CATS.forEach(c=>{const items=RESOURCES.filter(r=>r.cat===c).concat(aiResources.filter(r=>r.cat===c));
+    if(!items.length)return;
+    h+=`<h3 style="margin:1rem 0 .5rem;font-size:1.05rem">${esc(c)}</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.8rem">${items.map(card).join('')}</div>`;});
+  const other=aiResources.filter(r=>RES_CATS.indexOf(r.cat)<0);
+  if(other.length)h+=`<h3 style="margin:1rem 0 .5rem;font-size:1.05rem">More (AI suggested)</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.8rem">${other.map(card).join('')}</div>`;
+  $('view-resources').innerHTML=h;
+}
+async function aiSuggestRes(){
+  const q=$('res-q').value.trim();if(!q){toast('Type a topic first.','warn');return;}
+  const box=$('res-ai');box.innerHTML=`<div class="verdict r-na"><div class="verdict-body" style="display:flex;gap:.5rem;align-items:center"><span class="spin"></span> Finding resources…</div></div>`;
+  try{
+    const out=await callAI(`Suggest 4-6 FREE, open-access, real resources for a law teacher on the topic: "${q}". Prefer well-known open resources (open casebooks, free legal databases, university OERs, reputable guides). Return ONLY a JSON array: [{"cat":"Books & Casebooks|Databases|Teaching Guides|Tips & Best Practices|Video & Media","title":"...","desc":"one sentence","url":"https://..."}]. Do not invent fake URLs; if unsure of an exact URL, link to the organization's main site.`);
+    let arr=parseJSONArr(out);
+    if(!arr){box.innerHTML=`<p class="empty">Couldn't parse suggestions. Raw: ${esc(String(out).slice(0,300))}</p>`;return;}
+    arr.forEach(r=>r.ai=true);aiResources=aiResources.concat(arr);box.innerHTML='';renderResources();
+    toast('Added AI-suggested resources (gold badge).');
+  }catch(err){box.innerHTML='';handleAIError(err);}
+}
+
+/* ---------------- HOW TO USE ---------------- */
+function guideBlock(t,b){return `<details class="card sec" style="margin-bottom:.6rem"><summary><div class="sec-ico">›</div><div style="font-weight:600;font-family:'Spectral',serif">${t}</div><span class="chev">▶</span></summary><div class="sec-body"><p style="margin:.2rem 0;line-height:1.65">${b}</p></div></details>`;}
+function renderHowto(){
+  $('view-howto').innerHTML=`
+  <div class="card" style="padding:1.3rem;margin-bottom:1rem">
+    <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+      <h2 style="margin:0">How to Use</h2>
+      <button class="btn btn-sm btn-outline" style="margin-left:auto" onclick="showWalkthrough(true)">▶ Replay quick walkthrough</button>
+    </div>
+    <p class="muted" style="font-size:.92rem;margin-bottom:0">Everything you need to run your workspace. This guide is always available, regardless of the walkthrough.</p>
+  </div>
+  ${guideBlock('1 · Your card','On opening the app you pick your name (or "Create Your Card" if you are not listed). Each card is a separate, private workspace stored in this browser. Use the ↺ button in the header to switch cards.')}
+  ${guideBlock('2 · Sections & "＋ Add"','Open any section (Profile, Syllabus, Student Records…). Use <strong>＋ Add Entry</strong> to add records, and <strong>＋ Add Field</strong> inside a form to capture anything the predefined fields do not cover.')}
+  ${guideBlock('3 · Uploading documents & photos','Every entry form has an Attachments picker for certificates, PDFs and images. In this prototype files live in your browser; move them to a backend before relying on them long-term.')}
+  ${guideBlock('4 · The AI Box (classify → confirm → populate)','Paste text, attach a doc, or add an image to the AI box on your dashboard. The AI detects what it is, shows a parsed <strong>preview</strong>, and only writes into a section after you press <strong>Confirm</strong>. Populated fields stay fully editable.')}
+  ${guideBlock('5 · AI Analyze in every section','Each entry has an <strong>✦ AI Analyze</strong> button. It returns an assessment — Poor / Fair / Good / Excellent — with a score, strengths, weaknesses, terminology checks and accuracy notes. Useful for grading student work, tests and assignments, and for checking your own materials.')}
+  ${guideBlock('6 · Provider API keys','Open ⚙️ Settings to choose Claude, Gemini, ChatGPT or DeepSeek and paste that provider key. One provider is active at a time; keys stay in your browser. Claude works in the in-app preview without a key.')}
+  ${guideBlock('7 · Cross-linking','Courses you add in <strong>Syllabus</strong> automatically appear in Lesson Plans, Time Table and Attendance. Students you add in <strong>Student Records</strong> are the same roster used by Attendance — never re-typed.')}
+  ${guideBlock('8 · Resource Library','A curated set of free legal teaching resources, plus an AI search that suggests more on any topic (shown with an "AI suggested" badge).')}
+  `;
+}
+
+/* ---------------- WALKTHROUGH ---------------- */
+function showWalkthrough(force){
+  if(state.seenWalkthrough&&!force)return;
+  $('walkthrough-mount').innerHTML=`<div class="overlay" onclick="if(event.target===this)dismissWalk()">
+    <div class="modal" style="padding:1.4rem;max-width:480px">
+      <div class="logo-badge" style="margin-bottom:.6rem">${logoSVG()}</div>
+      <h3 style="margin:.2rem 0">Welcome to your workspace</h3>
+      <p class="muted" style="font-size:.92rem">A 20-second tour:</p>
+      <ul style="line-height:1.7;font-size:.92rem;padding-left:1.1rem">
+        <li><strong>AI Box</strong> — paste anything; it sorts content into the right section after you confirm.</li>
+        <li><strong>Sections</strong> — expand any card; use ＋ Add to extend fields.</li>
+        <li><strong>✦ AI Analyze</strong> — get a Poor → Excellent verdict on student work and materials.</li>
+        <li><strong>⚙️ Settings</strong> — pick your AI provider and theme.</li>
+      </ul>
+      <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:1rem">
+        <button class="btn btn-primary" onclick="dismissWalk()">Get started</button>
+      </div></div></div>`;
+}
+function dismissWalk(){state.seenWalkthrough=true;persist();$('walkthrough-mount').innerHTML='';}
+
+window.addEventListener('error',e=>{console.error(e.error||e.message);});
+init();
+</script>
+</body>
+</html>
